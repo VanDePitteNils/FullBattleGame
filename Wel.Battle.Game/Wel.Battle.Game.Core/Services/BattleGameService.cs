@@ -54,6 +54,25 @@ namespace Wel.Battle.Game.Core.Services
             return sb.ToString();
         }
 
+        public string AbilityBattleChat(Player attacker, Player defender)
+        {
+            string attackertype = attacker.GetType().Name;
+            string defenderType = defender.GetType().Name;
+
+            StringBuilder sb = new StringBuilder();
+            if(attacker is Mage)
+            {
+                sb.Append($"{attackertype} {attacker.Name} used Fireball dealing 20 area damage\n");
+            }else if(attacker is Assassin)
+            {
+                sb.Append($"{attackertype} {attacker.Name} used leach dealing 10 damage to {defenderType} {defender.Name}\n while {attackertype} {attacker.Name} gains 10hp\n");
+            }else if(attacker is Tank)
+            {
+                sb.Append($"{attackertype} {attacker.Name} has gone beserk increasing his power but lowering his defense\n while dealing 20 damage to {defenderType} {defender.Name}\n");
+            }
+            return sb.ToString();
+        }
+
         public void AddMage(string name)
         {
             players.Add(new Mage(name));

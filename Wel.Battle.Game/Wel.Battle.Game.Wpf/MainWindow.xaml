@@ -15,13 +15,13 @@
         <ListBox x:Name="lstAttackers"  HorizontalAlignment="Left" Width="222" Margin="10,30,0,246" SelectionChanged="LstAttackers_SelectionChanged" />
         <ListBox x:Name="lstDefenders" HorizontalAlignment="Left" Width="235" Margin="250,30,0,246" SelectionChanged="LstDefenders_SelectionChanged" />
         <Button x:Name="btnAttack" Content="Attack!" Background="#FFFDBCBC" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" Margin="10,238,0,0" Height="60" Width="124" Click="BtnAttack_Click"/>
-        <Button x:Name="btnEquip" Content="EQUIP" HorizontalAlignment="Left" Height="56" Margin="502,79,0,0" VerticalAlignment="Top" Width="124" Background="#FFB8FF99" Click="BtnEquip_Click" />
-        <Button x:Name="btnUnequip" Content="UNEQUIP" HorizontalAlignment="Left" Height="56" Margin="502,141,0,0" VerticalAlignment="Top" Width="124" Background="#FFFF8B8B" Click="BtnUnequip_Click"/>
+        <Button x:Name="btnEquip" Content="EQUIP" HorizontalAlignment="Left" Height="56" Margin="618,69,0,0" VerticalAlignment="Top" Width="82" Background="#FFB8FF99" Click="BtnEquip_Click" />
+        <Button x:Name="btnUnequip" Content="UNEQUIP" HorizontalAlignment="Left" Height="56" Margin="509,69,0,0" VerticalAlignment="Top" Width="76" Background="#FFFF8B8B" Click="BtnUnequip_Click"/>
         <Button x:Name="Home" Content="HOME" HorizontalAlignment="Left" Height="33" Margin="643,10,0,0" VerticalAlignment="Top" Width="75" Click="Home_Click" Background="#FF8EBEFF" />
         <Button x:Name="btnAbility" Content="Ability" Background="Aquamarine" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" Margin="188,238,0,0" Height="60" Width="124" Click="BtnAbility_Click"/>
         <Button x:Name="btnItem" Content="Use Item" Background="LawnGreen" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" Margin="364,233,0,0" Height="60" Width="124"/>
         <Label x:Name="lblPlayerDetail" Content="" HorizontalAlignment="Left" Height="98" Margin="485,335,0,0" VerticalAlignment="Top" Width="233" Background="#BFF0F0F0"/>
-        <ListBox x:Name="lstItems" HorizontalAlignment="Left" Height="98" Margin="0,335,0,0" VerticalAlignment="Top" Width="165" Background="#BFF0F0F0"/>
-        <Label x:Name="lblBattleChat" Content="" HorizontalAlignment="Left" Height="98" Margin="208,335,0,0" VerticalAlignment="Top" Width="249" Background="#BFF0F0F0"/>
+        <ListBox x:Name="lstItems" HorizontalAlignment="Left" Height="98" Margin="509,130,0,0" VerticalAlignment="Top" Width="191" Background="#BFF0F0F0"/>
+        <Label x:Name="lblBattleChat" Content="" HorizontalAlignment="Left" Height="98" Margin="10,335,0,0" VerticalAlignment="Top" Width="441" Background="#BFF0F0F0"/>
     </Grid>
 </Window>

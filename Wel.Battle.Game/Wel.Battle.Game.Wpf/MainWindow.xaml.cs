@@ -132,39 +132,50 @@ namespace Wel.Battle.Game.Wpf
                 MessageBox.Show("All Enemies are dead");
             }
             bgs.AttackEnemy((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+
             if(battleCounter == 5)
             {
                 RefreshBattleChat();
                 battleCounter = 0;
             }
-            ShowBattleChat();
+            ShowAttackBattleChat();
             RefreshLists();
         }
 
         private void BtnAbility_Click(object sender, RoutedEventArgs e)
         {
             Player defender = (Player)lstDefenders.SelectedItem;
+            Player attacker = (Player)lstAttackers.SelectedItem;
+
+            if (battleCounter >= 4)
+            {
+                RefreshBattleChat();
+                battleCounter = 0;
+            }
 
             if (IsMage((Player)lstAttackers.SelectedItem))
             {
                 MageFireballAbility();
+                battleCounter++;
             }
             else if (IsTank((Player)lstAttackers.SelectedItem))
             {
                 Tank tank = (Tank)lstAttackers.SelectedItem;
                 tank.Beserk(defender);
+                battleCounter += 2;
             }
             else if (IsAssassin((Player)lstAttackers.SelectedItem))
             {
                 Assassin assassin = (Assassin)lstAttackers.SelectedItem;
                 assassin.Leach(defender);
+                battleCounter += 2;
             }
+            ShowAbilityBattleChat();
             RefreshLists();
             RefreshPlayerInfo();
         }
         #endregion
 
-        
         #region ---- Methods ----
 
         public void DoSeeding()
@@ -237,10 +248,15 @@ namespace Wel.Battle.Game.Wpf
             }
         }
 
-        public void ShowBattleChat()
+        public void ShowAttackBattleChat()
         {
             lblBattleChat.Content += bgs.AttackBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
             battleCounter++;
+        }
+
+        public void ShowAbilityBattleChat()
+        {
+            lblBattleChat.Content += bgs.AbilityBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
         }
 
         public static bool IsMage(Player player)

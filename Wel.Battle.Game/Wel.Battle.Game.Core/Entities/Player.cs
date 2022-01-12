@@ -13,10 +13,35 @@ namespace Wel.Battle.Game.Core.Entities
         public List<IInventoryItem> Inventory { get; }
         public bool IsAlive { get; set; }
         public bool HasWeapon { get; set; }
-        public int AttackStrength { get; set; }
-        public int DefenseStrength { get; set; }
+        private readonly Random rnd = new Random();
 
-        readonly Random rnd = new Random();
+        private int attackStrength;
+        public int AttackStrength
+        {
+            get 
+            {
+                if(attackStrength > 200)
+                {
+                    return 200;
+                }
+                return attackStrength;
+            }
+            set { attackStrength = value; }
+        }
+
+        private int defenseStrength;
+        public int DefenseStrength
+        {
+            get 
+            {
+                if (defenseStrength <= 0)
+                {
+                    defenseStrength = 0;
+                }
+                return defenseStrength;
+            }
+            set { defenseStrength = value; }
+        }
 
         private string name;
         public string Name
@@ -57,9 +82,9 @@ namespace Wel.Battle.Game.Core.Entities
             }
         }
 
-        public void Equip (Weapon weapon)
+        public void Equip(Weapon item)
         {
-            AttackStrength += weapon.Damage;
+            AttackStrength += item.Damage;
         }
 
         public void Attack(IPlayer defender)
@@ -73,7 +98,14 @@ namespace Wel.Battle.Game.Core.Entities
             sb.Append($"#### {name} ####\n");
             sb.Append($"Health: {Health}\n");
             sb.Append($"Attack Strength: {AttackStrength}\n");
-            sb.Append($"Defense Strength : {DefenseStrength}");
+            sb.Append($"Defense Strength : {DefenseStrength}\n");
+            if (IsAlive) {
+                sb.Append($"Status: Alive");
+            }
+            else
+            {
+                sb.Append($"Status: Dead");
+            }
             return sb.ToString();
         }
 
@@ -91,7 +123,7 @@ namespace Wel.Battle.Game.Core.Entities
         {
             if (IsAlive)
             {
-                return $"{Name} - {Health} ({GetType().Name.Substring(0,1).ToUpper()})";
+                return $"{Name} - {Health} ({GetType().Name.Substring(0, 1).ToUpper()})";
             }
             else if (HasWeapon)
             {
