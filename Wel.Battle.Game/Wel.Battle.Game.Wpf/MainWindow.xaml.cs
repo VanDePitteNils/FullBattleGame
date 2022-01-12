@@ -106,13 +106,13 @@ namespace Wel.Battle.Game.Wpf
         private void BtnAttack_Click(object sender, RoutedEventArgs e)
         {
             PlayerAttack();
-            if (battleCounter == 5)
+            ComputerAttack();
+            if (battleCounter >= 5)
             {
                 RefreshBattleChat();
                 battleCounter = 0;
             }
             RefreshLists();
-            ComputerAttack();
         }
 
         private void BtnAbility_Click(object sender, RoutedEventArgs e)
@@ -312,6 +312,7 @@ namespace Wel.Battle.Game.Wpf
         #endregion
 
         #region ---- Playable methods ---- 
+
         public void PlayerAttack()
         {
             ButtonCheck();
@@ -323,11 +324,21 @@ namespace Wel.Battle.Game.Wpf
 
         public void ComputerAttack() 
         {
-            Player randomAttacker = bgs.attackers[rnd.Next(0, bgs.attackers.Count)];
-            Player randomDefender = bgs.defenders[rnd.Next(0, bgs.defenders.Count)];
 
-            bgs.EnemyAttack(randomDefender, randomAttacker);
-            ShowEnemyAttackBattleChat(randomDefender, randomAttacker);
+            Player randomDefender = bgs.defenders[rnd.Next(0, bgs.defenders.Count)];
+            Player randomAttacker = bgs.attackers[rnd.Next(0, bgs.attackers.Count)];
+            do
+            {
+                randomAttacker = bgs.attackers[rnd.Next(0, bgs.attackers.Count)];
+                randomDefender = bgs.defenders[rnd.Next(0, bgs.defenders.Count)];
+
+                if (randomAttacker.IsAlive && randomDefender.IsAlive)
+                {
+                    bgs.EnemyAttack(randomDefender, randomAttacker);
+                    ShowEnemyAttackBattleChat(randomDefender, randomAttacker);
+                    break;
+                }
+            } while (!randomAttacker.IsAlive && !randomDefender.IsAlive);
         }
         #endregion
 
