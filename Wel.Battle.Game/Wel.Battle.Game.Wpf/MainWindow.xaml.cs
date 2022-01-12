@@ -37,6 +37,8 @@ namespace Wel.Battle.Game.Wpf
             Loaded += ToolWindow_Loaded;
         }
 
+        #region ---- Other ----
+
         void ToolWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Code to remove close box from window
@@ -44,12 +46,31 @@ namespace Wel.Battle.Game.Wpf
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
 
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            Home venster = new Home();
+            this.Visibility = Visibility.Hidden;
+            venster.ShowDialog();
+        }
+
+        private void Shop_Click(object sender, RoutedEventArgs e)
+        {
+            shop venster = new shop();
+            this.Visibility = Visibility.Hidden;
+            venster.ShowDialog();
+        }
+
+
+        #endregion
+
+
         #region ---- Global Variables ----
 
         BattleGameService bgs = new BattleGameService();
         private readonly List<Weapon> weapons = new List<Weapon>();
 
         #endregion
+
 
         #region ---- Event Handlers ----
 
@@ -119,7 +140,21 @@ namespace Wel.Battle.Game.Wpf
             Player defender = (Player)lstDefenders.SelectedItem;
             if (IsMage((Player)lstAttackers.SelectedItem))
             {
-                Mage.FireBall(defender);
+                int findPlayerPos = bgs.players.IndexOf(defender);
+                Mage.FireBall(bgs.players[findPlayerPos]);
+                if(findPlayerPos == bgs.players.Count-1)
+                {
+                Mage.FireBall(bgs.players[findPlayerPos - 1]);
+                }else if(findPlayerPos == 0)
+                {
+                Mage.FireBall(bgs.players[findPlayerPos + 1]);
+                }
+                else
+                {
+                    Mage.FireBall(bgs.players[findPlayerPos + 1]);
+                    Mage.FireBall(bgs.players[findPlayerPos - 1]);
+                }
+
             }
             else if (IsTank((Player)lstAttackers.SelectedItem))
             {
@@ -133,19 +168,7 @@ namespace Wel.Battle.Game.Wpf
         }
         #endregion
 
-        private void Home_Click(object sender, RoutedEventArgs e)
-        {
-            Home venster = new Home();
-            this.Visibility = Visibility.Hidden;
-            venster.ShowDialog();
-        }
-
-        private void shop_Click(object sender, RoutedEventArgs e)
-        {
-            shop venster = new shop();
-            this.Visibility = Visibility.Hidden;
-            venster.ShowDialog();
-        }
+        
         #region ---- Methods ----
 
         public void DoSeeding()

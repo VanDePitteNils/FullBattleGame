@@ -19,6 +19,7 @@ namespace Wel.Battle.Game.Core.Entities.Classes
         public static void Stab(Player defender)
         {
             defender.Health -= 30;
+
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wel.Battle.Game.Core.Entities.Weapons;
+using Wel.Battle.Game.Core.Services;
 
 namespace Wel.Battle.Game.Core.Entities.Classes
 {
