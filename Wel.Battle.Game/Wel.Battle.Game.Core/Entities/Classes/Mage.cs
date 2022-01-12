@@ -12,9 +12,9 @@ namespace Wel.Battle.Game.Core.Entities.Classes
     {
         public Mage(string name) : base(name)
         {
-            AttackStrength = 60;
-            Health = 140;
-            DefenseStrength = 175;
+            Health = 240;
+            AttackStrength = 40;
+            DefenseStrength = 60;
         }
 
         public static void FireBall(Player defender)

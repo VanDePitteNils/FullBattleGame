@@ -47,14 +47,22 @@ namespace Wel.Battle.Game.Core.Services
             }
         }
 
-        public string AttackBattleChat(Player attacker, Player defender)
+        public void EnemyAttack(Player defender, Player attacker)
+        {
+            if (defender != null)
+            {
+                defender.Attack(attacker);
+            }
+        }
+
+        public string FriendlyAttackBattleChat(Player attacker, Player defender)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($"{attacker.GetType().Name} {attacker.Name} has dealth {attacker.AttackStrength} to {defender.GetType().Name} {defender.Name}\n");
             return sb.ToString();
         }
 
-        public string AbilityBattleChat(Player attacker, Player defender)
+        public string FriendlyAbilityBattleChat(Player attacker, Player defender)
         {
             string attackertype = attacker.GetType().Name;
             string defenderType = defender.GetType().Name;
@@ -70,6 +78,13 @@ namespace Wel.Battle.Game.Core.Services
             {
                 sb.Append($"{attackertype} {attacker.Name} has gone beserk increasing his power but lowering his defense\n while dealing 20 damage to {defenderType} {defender.Name}\n");
             }
+            return sb.ToString();
+        }
+
+        public string EnemyAttackBattleChat(Player defender, Player attacker)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{defender.GetType().Name} {defender.Name} has dealth {defender.AttackStrength} to {attacker.GetType().Name} {attacker.Name}\n");
             return sb.ToString();
         }
 

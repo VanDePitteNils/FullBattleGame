@@ -63,20 +63,20 @@ namespace Wel.Battle.Game.Wpf
 
         #endregion
 
-
         #region ---- Global Variables ----
 
         BattleGameService bgs = new BattleGameService();
         private readonly List<Weapon> weapons = new List<Weapon>();
+        private readonly Random rnd = new Random();
         int battleCounter = 0;
 
         #endregion
-
 
         #region ---- Event Handlers ----
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show(UpdateMessage(),"Patch Notes",MessageBoxButton.OK,MessageBoxImage.Information);
             DoSeeding();
             btnEquip.IsEnabled = false;
             btnUnequip.IsEnabled = false;
@@ -87,16 +87,10 @@ namespace Wel.Battle.Game.Wpf
         private void LstAttackers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IsAttackerAndDefenderSelected();
-            if(lstAttackers != null || lstDefenders != null)
+            if(lstAttackers.SelectedItem != null)
             {
-                lblPlayerDetail.Visibility = Visibility.Visible;
                 lblPlayerDetail.Content = bgs.ShowPlayerInfo((Player)lstAttackers.SelectedItem);
-            } 
-            else
-            {
-                lblPlayerDetail.Visibility = Visibility.Hidden;
             }
-
         }
 
         private void LstDefenders_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -118,28 +112,14 @@ namespace Wel.Battle.Game.Wpf
 
         private void BtnAttack_Click(object sender, RoutedEventArgs e)
         {
-            int dead = 0;
-            foreach(Player player in bgs.players)
-            {
-                if (!player.IsAlive)
-                {
-                    dead++;
-                }
-            }
-            if(dead == bgs.defenders.Count)
-            {
-                btnAttack.IsEnabled = false;
-                MessageBox.Show("All Enemies are dead");
-            }
-            bgs.AttackEnemy((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
-
-            if(battleCounter == 5)
+            PlayerAttack();
+            if (battleCounter == 5)
             {
                 RefreshBattleChat();
                 battleCounter = 0;
             }
-            ShowAttackBattleChat();
             RefreshLists();
+            ComputerAttack();
         }
 
         private void BtnAbility_Click(object sender, RoutedEventArgs e)
@@ -177,6 +157,18 @@ namespace Wel.Battle.Game.Wpf
         #endregion
 
         #region ---- Methods ----
+
+        public string UpdateMessage()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("########## NEW IN GAME ##########\n\n");
+            sb.Append("* Attackers can now use a class ability that changes depending on the class\n");
+            sb.Append("* Defenders are now classified as enemies and not longer as playable characters\n");
+            sb.Append("* BattleChat is now a feature. when you attack or use an ability it will show what that character is doing\n");
+
+            return sb.ToString();
+        }
 
         public void DoSeeding()
         {
@@ -248,15 +240,21 @@ namespace Wel.Battle.Game.Wpf
             }
         }
 
-        public void ShowAttackBattleChat()
+        public void ShowFriendlyAttackBattleChat()
         {
-            lblBattleChat.Content += bgs.AttackBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            lblBattleChat.Content += bgs.FriendlyAttackBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            battleCounter++;
+        }
+
+        public void ShowEnemyAttackBattleChat(Player enemy, Player friendly)
+        {
+            lblBattleChat.Content += bgs.EnemyAttackBattleChat(enemy, friendly);
             battleCounter++;
         }
 
         public void ShowAbilityBattleChat()
         {
-            lblBattleChat.Content += bgs.AbilityBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            lblBattleChat.Content += bgs.FriendlyAbilityBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
         }
 
         public static bool IsMage(Player player)
@@ -297,6 +295,49 @@ namespace Wel.Battle.Game.Wpf
             }
         }
 
+        #endregion
+
+        #region ---- Playable methods ---- 
+        public void PlayerAttack()
+        {
+            int dead = 0;
+            foreach (Player player in bgs.players)
+            {
+                if (!player.IsAlive)
+                {
+                    dead++;
+                }
+            }
+            if (dead == bgs.defenders.Count)
+            {
+                btnAttack.IsEnabled = false;
+                MessageBox.Show("All Enemies are dead");
+            }
+            bgs.AttackEnemy((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            ShowFriendlyAttackBattleChat();
+        }
+
+        public void ComputerAttack() 
+        {
+            int dead = 0;
+            Player randomAttacker = bgs.attackers[rnd.Next(0, bgs.attackers.Count)];
+            Player randomDefender = bgs.defenders[rnd.Next(0, bgs.defenders.Count)];
+
+            foreach (Player player in bgs.players)
+            {
+                if (!player.IsAlive)
+                {
+                    dead++;
+                }
+            }
+            if (dead == bgs.attackers.Count)
+            {
+                btnAttack.IsEnabled = false;
+                MessageBox.Show("All Enemies are dead");
+            }
+            bgs.EnemyAttack(randomDefender, randomAttacker);
+            ShowEnemyAttackBattleChat(randomDefender, randomAttacker);
+        }
         #endregion
 
         #endregion

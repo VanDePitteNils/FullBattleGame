@@ -11,9 +11,9 @@ namespace Wel.Battle.Game.Core.Entities.Classes
     {
         public Assassin(string name) : base(name)
         {
-            Health = 120;
+            Health = 200;
             AttackStrength = 50;
-            DefenseStrength = 5;
+            DefenseStrength = 40;
         }
 
         public void Leach(Player defender)

@@ -8,12 +8,11 @@ namespace Wel.Battle.Game.Core.Entities.Classes
 {
     public class Tank : Player
     {
-
         public Tank(string name) : base(name)
         {
-            Health = 200;
+            Health = 300;
             AttackStrength = 60;
-            DefenseStrength = 20;
+            DefenseStrength = 80;
         }
 
         public void Beserk(Player defender)

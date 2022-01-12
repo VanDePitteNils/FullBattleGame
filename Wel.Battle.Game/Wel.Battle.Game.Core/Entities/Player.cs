@@ -92,6 +92,11 @@ namespace Wel.Battle.Game.Core.Entities
             defender.Health -= AttackStrength;
         }
 
+        public void EnemyAttack(IPlayer attacker)
+        {
+            attacker.Health -= attackStrength;
+        }
+
         public string ShowInfo()
         {
             StringBuilder sb = new StringBuilder();
