@@ -16,9 +16,12 @@ namespace Wel.Battle.Game.Core.Entities.Classes
             DefenseStrength = 20;
         }
 
-        public static void Bash(Player defender)
+        public void Beserk(Player defender)
         {
             defender.Health -= 40;
+
+            AttackStrength += 20;
+            DefenseStrength -= 20;
         }
     }
 }

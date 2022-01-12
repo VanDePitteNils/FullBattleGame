@@ -47,6 +47,13 @@ namespace Wel.Battle.Game.Core.Services
             }
         }
 
+        public string AttackBattleChat(Player attacker, Player defender)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{attacker.GetType().Name} {attacker.Name} has dealth {attacker.AttackStrength} to {defender.GetType().Name} {defender.Name}\n");
+            return sb.ToString();
+        }
+
         public void AddMage(string name)
         {
             players.Add(new Mage(name));

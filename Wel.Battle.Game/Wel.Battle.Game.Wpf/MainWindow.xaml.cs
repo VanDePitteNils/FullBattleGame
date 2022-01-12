@@ -68,6 +68,7 @@ namespace Wel.Battle.Game.Wpf
 
         BattleGameService bgs = new BattleGameService();
         private readonly List<Weapon> weapons = new List<Weapon>();
+        int battleCounter = 0;
 
         #endregion
 
@@ -131,6 +132,12 @@ namespace Wel.Battle.Game.Wpf
                 MessageBox.Show("All Enemies are dead");
             }
             bgs.AttackEnemy((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            if(battleCounter == 5)
+            {
+                RefreshBattleChat();
+                battleCounter = 0;
+            }
+            ShowBattleChat();
             RefreshLists();
         }
 
@@ -144,12 +151,13 @@ namespace Wel.Battle.Game.Wpf
             }
             else if (IsTank((Player)lstAttackers.SelectedItem))
             {
-                Tank.Bash(defender);
+                Tank tank = (Tank)lstAttackers.SelectedItem;
+                tank.Beserk(defender);
             }
             else if (IsAssassin((Player)lstAttackers.SelectedItem))
             {
-                Assassin player = (Assassin)lstAttackers.SelectedItem;
-                player.Leach(defender);
+                Assassin assassin = (Assassin)lstAttackers.SelectedItem;
+                assassin.Leach(defender);
             }
             RefreshLists();
             RefreshPlayerInfo();
@@ -212,6 +220,11 @@ namespace Wel.Battle.Game.Wpf
             lblPlayerDetail.Content = bgs.ShowPlayerInfo(player);
         }
 
+        public void RefreshBattleChat()
+        {
+            lblBattleChat.Content = "";
+        }
+
         public void IsAttackerAndDefenderSelected()
         {
             if (lstDefenders.SelectedItem == null && lstAttackers.SelectedItem == null)
@@ -222,6 +235,12 @@ namespace Wel.Battle.Game.Wpf
             {
                 btnAbility.IsEnabled = true;
             }
+        }
+
+        public void ShowBattleChat()
+        {
+            lblBattleChat.Content += bgs.AttackBattleChat((Player)lstAttackers.SelectedItem, (Player)lstDefenders.SelectedItem);
+            battleCounter++;
         }
 
         public static bool IsMage(Player player)
@@ -245,6 +264,7 @@ namespace Wel.Battle.Game.Wpf
         {
             Player defender = (Player)lstDefenders.SelectedItem;
             int findPlayerPos = bgs.players.IndexOf(defender);
+
             Mage.FireBall(bgs.players[findPlayerPos]);
             if (findPlayerPos == bgs.players.Count - 1)
             {

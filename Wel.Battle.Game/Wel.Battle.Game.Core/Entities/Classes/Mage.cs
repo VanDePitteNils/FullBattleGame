@@ -21,5 +21,11 @@ namespace Wel.Battle.Game.Core.Entities.Classes
         {
             defender.Health -= 20;
         }
+
+        public void Heal(Player friendly)
+        {
+            Health -= 10;
+            friendly.Health += 10;
+        }
     }
 }

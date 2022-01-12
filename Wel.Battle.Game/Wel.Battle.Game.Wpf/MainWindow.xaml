@@ -21,6 +21,7 @@
         <Button x:Name="btnAbility" Content="Ability" Background="Aquamarine" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" Margin="188,238,0,0" Height="60" Width="124" Click="BtnAbility_Click"/>
         <Button x:Name="btnItem" Content="Use Item" Background="LawnGreen" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" Margin="364,233,0,0" Height="60" Width="124"/>
         <Label x:Name="lblPlayerDetail" Content="" HorizontalAlignment="Left" Height="98" Margin="485,335,0,0" VerticalAlignment="Top" Width="233" Background="#BFF0F0F0"/>
-        <ListBox x:Name="lstItems" HorizontalAlignment="Left" Height="98" Margin="37,335,0,0" VerticalAlignment="Top" Width="411" Background="#BFF0F0F0"/>
+        <ListBox x:Name="lstItems" HorizontalAlignment="Left" Height="98" Margin="0,335,0,0" VerticalAlignment="Top" Width="165" Background="#BFF0F0F0"/>
+        <Label x:Name="lblBattleChat" Content="" HorizontalAlignment="Left" Height="98" Margin="208,335,0,0" VerticalAlignment="Top" Width="249" Background="#BFF0F0F0"/>
     </Grid>
 </Window>
