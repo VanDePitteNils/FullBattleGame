@@ -103,7 +103,6 @@ namespace Wel.Battle.Game.Wpf
             IsAttackerAndDefenderSelected();
         }
 
-
         private void BtnEquip_Click(object sender, RoutedEventArgs e)
         {
             Player player = (Player)lstDefenders.SelectedItem;
@@ -138,23 +137,10 @@ namespace Wel.Battle.Game.Wpf
         private void BtnAbility_Click(object sender, RoutedEventArgs e)
         {
             Player defender = (Player)lstDefenders.SelectedItem;
+
             if (IsMage((Player)lstAttackers.SelectedItem))
             {
-                int findPlayerPos = bgs.players.IndexOf(defender);
-                Mage.FireBall(bgs.players[findPlayerPos]);
-                if(findPlayerPos == bgs.players.Count-1)
-                {
-                Mage.FireBall(bgs.players[findPlayerPos - 1]);
-                }else if(findPlayerPos == 0)
-                {
-                Mage.FireBall(bgs.players[findPlayerPos + 1]);
-                }
-                else
-                {
-                    Mage.FireBall(bgs.players[findPlayerPos + 1]);
-                    Mage.FireBall(bgs.players[findPlayerPos - 1]);
-                }
-
+                MageFireballAbility();
             }
             else if (IsTank((Player)lstAttackers.SelectedItem))
             {
@@ -162,9 +148,11 @@ namespace Wel.Battle.Game.Wpf
             }
             else if (IsAssassin((Player)lstAttackers.SelectedItem))
             {
-                Assassin.Stab(defender);
+                Assassin player = (Assassin)lstAttackers.SelectedItem;
+                player.Leach(defender);
             }
             RefreshLists();
+            RefreshPlayerInfo();
         }
         #endregion
 
@@ -217,6 +205,25 @@ namespace Wel.Battle.Game.Wpf
             lstDefenders.Items.Refresh();
         }
 
+        public void RefreshPlayerInfo()
+        {
+            Player player = (Player)lstAttackers.SelectedItem;
+            lblPlayerDetail.Content = "";
+            lblPlayerDetail.Content = bgs.ShowPlayerInfo(player);
+        }
+
+        public void IsAttackerAndDefenderSelected()
+        {
+            if (lstDefenders.SelectedItem == null && lstAttackers.SelectedItem == null)
+            {
+                btnAbility.IsEnabled = false;
+            }
+            else
+            {
+                btnAbility.IsEnabled = true;
+            }
+        }
+
         public static bool IsMage(Player player)
         {
             return player is Mage;
@@ -232,30 +239,29 @@ namespace Wel.Battle.Game.Wpf
             return player is Assassin;
         }
 
-        public void IsAttackerAndDefenderSelected()
+        #region ---- Abilities ----
+
+        public void MageFireballAbility()
         {
-            if (lstDefenders.SelectedItem == null && lstAttackers.SelectedItem == null)
+            Player defender = (Player)lstDefenders.SelectedItem;
+            int findPlayerPos = bgs.players.IndexOf(defender);
+            Mage.FireBall(bgs.players[findPlayerPos]);
+            if (findPlayerPos == bgs.players.Count - 1)
             {
-                btnAbility.IsEnabled = false;
+                Mage.FireBall(bgs.players[findPlayerPos - 1]);
+            }
+            else if (findPlayerPos == 0)
+            {
+                Mage.FireBall(bgs.players[findPlayerPos + 1]);
             }
             else
             {
-                btnAbility.IsEnabled = true;
+                Mage.FireBall(bgs.players[findPlayerPos + 1]);
+                Mage.FireBall(bgs.players[findPlayerPos - 1]);
             }
         }
 
-        /*
-        private List<IPlayer> SelectedItems()
-        {
-            List<IPlayer> selectedItems = new List<IPlayer>();
-
-            foreach (IPlayer item in lstPreys.SelectedItems)
-            {
-                selectedItems.Add(item);
-            }
-            return selectedItems;
-        }
-        */
+        #endregion
 
         #endregion
     }

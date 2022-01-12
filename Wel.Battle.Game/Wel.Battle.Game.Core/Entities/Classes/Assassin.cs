@@ -16,10 +16,11 @@ namespace Wel.Battle.Game.Core.Entities.Classes
             DefenseStrength = 5;
         }
 
-        public static void Stab(Player defender)
+        public void Leach(Player defender)
         {
-            defender.Health -= 30;
-
+            int stolenHealth = 10;
+            defender.Health -= stolenHealth;
+            Health += stolenHealth; 
         }
     }
 }
