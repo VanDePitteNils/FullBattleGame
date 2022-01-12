@@ -57,9 +57,13 @@ namespace Wel.Battle.Game.Core.Services
 
         public string FriendlyAttackBattleChat(Player attacker, Player defender)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"{attacker.GetType().Name} {attacker.Name} has dealth {attacker.AttackStrength} to {defender.GetType().Name} {defender.Name}\n");
-            return sb.ToString();
+            if(attacker != null)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"{attacker.GetType().Name} {attacker.Name} has dealth {attacker.AttackStrength} to {defender.GetType().Name} {defender.Name}\n");
+                return sb.ToString();
+            }
+            return null;
         }
 
         public string FriendlyAbilityBattleChat(Player attacker, Player defender)

@@ -68,16 +68,13 @@ namespace Wel.Battle.Game.Core.Entities
             {
                 if (health <= 0)
                 {
+                    IsAlive = false;
                     return 0;
                 }
                 return health;
             }
             set
             {
-                if(health <= 0)
-                {
-                    IsAlive = false;
-                }
                 health = value;
             }
         }
@@ -129,10 +126,6 @@ namespace Wel.Battle.Game.Core.Entities
             if (IsAlive)
             {
                 return $"{Name} - {Health} ({GetType().Name.Substring(0, 1).ToUpper()})";
-            }
-            else if (HasWeapon)
-            {
-                return $"{Name} - {Health} ({GetType().Name.Substring(0, 1).ToUpper()}) (W)";
             }
             else
             {
