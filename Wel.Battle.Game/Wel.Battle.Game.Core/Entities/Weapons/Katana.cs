@@ -8,9 +8,9 @@ namespace Wel.Battle.Game.Core.Entities.Weapons
 {
     public class Katana : Weapon
     {
-        public Katana(string name) : base(name)
+        public Katana()
         {
-            Name = name;
+            Name = GetType().Name;
             Damage = 8;
             Durability = 15;
         }

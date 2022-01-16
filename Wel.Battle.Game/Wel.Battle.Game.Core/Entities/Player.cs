@@ -20,7 +20,7 @@ namespace Wel.Battle.Game.Core.Entities
         {
             get 
             {
-                if(attackStrength > 200)
+                if(attackStrength >= 200)
                 {
                     return 200;
                 }
@@ -79,6 +79,16 @@ namespace Wel.Battle.Game.Core.Entities
             }
         }
 
+        public Player(string name)
+        {
+            Name = name;
+            Health = 100;
+            IsAlive = true;
+            HasWeapon = false;
+            AttackStrength = rnd.Next(5,15);
+            DefenseStrength = 10;
+        }
+
         public void Equip(Weapon item)
         {
             AttackStrength += item.Damage;
@@ -109,16 +119,6 @@ namespace Wel.Battle.Game.Core.Entities
                 sb.Append($"Status: Dead");
             }
             return sb.ToString();
-        }
-
-        public Player(string name)
-        {
-            Name = name ;
-            Health = 100;
-            IsAlive = true;
-            HasWeapon = false;
-            AttackStrength = rnd.Next(5,15);
-            DefenseStrength = 10;
         }
 
         public override string ToString()

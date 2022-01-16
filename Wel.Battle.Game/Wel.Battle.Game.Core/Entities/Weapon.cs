@@ -25,9 +25,9 @@ namespace Wel.Battle.Game.Core.Entities.Weapons
             }
         }
 
-        public Weapon(string name)
+        public Weapon()
         {
-            Name = name;
+            Name = GetType().Name;
             Damage = 5;
             Durability = 10;
         }

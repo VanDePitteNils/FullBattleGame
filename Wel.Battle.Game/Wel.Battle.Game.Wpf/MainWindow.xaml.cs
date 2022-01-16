@@ -60,7 +60,7 @@ namespace Wel.Battle.Game.Wpf
         BattleGameService bgs = new BattleGameService();
         private readonly List<Weapon> weapons = new List<Weapon>();
         private readonly Random rnd = new Random();
-        int battleCounter = 0;
+        int battleCounter;
 
         #endregion
 
@@ -68,11 +68,11 @@ namespace Wel.Battle.Game.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(UpdateMessage(),"Patch Notes",MessageBoxButton.OK,MessageBoxImage.Information);
-            DoSeeding();
             btnEquip.IsEnabled = false;
             btnUnequip.IsEnabled = false;
             btnItem.IsEnabled = false;
+            MessageBox.Show(UpdateMessage(),"Patch Notes",MessageBoxButton.OK,MessageBoxImage.Information);
+            DoSeeding();
         }
 
         private void LstAttackers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -105,47 +105,61 @@ namespace Wel.Battle.Game.Wpf
 
         private void BtnAttack_Click(object sender, RoutedEventArgs e)
         {
-            PlayerAttack();
-            ComputerAttack();
-            if (battleCounter >= 5)
+            if (lstDefenders.SelectedItem != null && lstAttackers.SelectedItem != null)
             {
-                RefreshBattleChat();
-                battleCounter = 0;
+                PlayerAttack();
+                ComputerAttack();
+                if (battleCounter >= 5)
+                {
+                    RefreshBattleChat();
+                    battleCounter = 0;
+                }
+                RefreshLists();
             }
-            RefreshLists();
         }
 
         private void BtnAbility_Click(object sender, RoutedEventArgs e)
         {
-            Player defender = (Player)lstDefenders.SelectedItem;
+            if(lstDefenders.SelectedItem != null && lstAttackers.SelectedItem != null)
+            {
+                Player defender = (Player)lstDefenders.SelectedItem;
+                Player friendly = (Player)lstAttackers.SelectedItem;
 
-            if (battleCounter >= 4)
-            {
-                RefreshBattleChat();
-                battleCounter = 0;
-            }
+                if (battleCounter >= 4)
+                {
+                    RefreshBattleChat();
+                    battleCounter = 0;
+                }
 
-            if (IsMage((Player)lstAttackers.SelectedItem))
-            {
-                MageFireballAbility();
-                battleCounter++;
+                if (IsMage((Player)lstAttackers.SelectedItem))
+                {
+                    if (lstAttackers.SelectedItem == null)
+                    {
+                        MageFireballAbility();
+                    }
+                    else
+                    {
+                        MageHeal();
+                    }
+                    battleCounter++;
+                }
+                else if (IsTank((Player)lstAttackers.SelectedItem))
+                {
+                    Tank tank = (Tank)lstAttackers.SelectedItem;
+                    tank.Beserk(defender);
+                    battleCounter += 2;
+                }
+                else if (IsAssassin((Player)lstAttackers.SelectedItem))
+                {
+                    Assassin assassin = (Assassin)lstAttackers.SelectedItem;
+                    assassin.Leach(defender);
+                    battleCounter += 2;
+                }
+                ShowAbilityBattleChat();
+                ComputerAttack();
+                RefreshLists();
+                RefreshPlayerInfo();
             }
-            else if (IsTank((Player)lstAttackers.SelectedItem))
-            {
-                Tank tank = (Tank)lstAttackers.SelectedItem;
-                tank.Beserk(defender);
-                battleCounter += 2;
-            }
-            else if (IsAssassin((Player)lstAttackers.SelectedItem))
-            {
-                Assassin assassin = (Assassin)lstAttackers.SelectedItem;
-                assassin.Leach(defender);
-                battleCounter += 2;
-            }
-            ShowAbilityBattleChat();
-            ComputerAttack();
-            RefreshLists();
-            RefreshPlayerInfo();
         }
         #endregion
 
@@ -163,29 +177,38 @@ namespace Wel.Battle.Game.Wpf
             return sb.ToString();
         }
 
-        public void DoSeeding()
+        private void DoSeeding()
         {
             SeedPlayers();
             SeedTeams();
         }
 
-        public void SeedWeapons()
+        private void SeedWeapons()
         {
-            weapons.Add(new Katana("Katana"));
-            weapons.Add(new Knife("Knife"));
+            weapons.Add(new Katana());
+            weapons.Add(new Knife());
         }
 
-        public void SeedPlayers()
+        private void SeedPlayers()
         {
-            bgs.AddMage("Alice");
-            bgs.AddTank("Bob");
-            bgs.AddAssassin("Carol");
-            bgs.AddMage("Dave");
-            bgs.AddMage("Eve");
-            bgs.AddTank("Freddy");
+            for(int i = 0; i < 7; i++)
+            {
+                int randomClass = rnd.Next(1, 4);
+
+                if(randomClass == 1)
+                {
+                    bgs.AddMage(bgs.names[i]);
+                }else if(randomClass == 2)
+                {
+                    bgs.AddTank(bgs.names[i]);
+                }else
+                {
+                    bgs.AddAssassin(bgs.names[i]);
+                }
+            }
         }
 
-        public void SeedTeams()
+        private void SeedTeams()
         {
             bgs.AddAttacker(bgs.players[0]);
             bgs.AddAttacker(bgs.players[1]);
@@ -196,7 +219,7 @@ namespace Wel.Battle.Game.Wpf
             FillLists();
         }
 
-        public void FillLists()
+        private void FillLists()
         {
             lstAttackers.ItemsSource = bgs.attackers;
             lstDefenders.ItemsSource = bgs.defenders;
@@ -307,6 +330,13 @@ namespace Wel.Battle.Game.Wpf
                 Mage.FireBall(bgs.players[findPlayerPos + 1]);
                 Mage.FireBall(bgs.players[findPlayerPos - 1]);
             }
+        }
+
+        public void MageHeal()
+        {
+            Player friendly = (Player)lstAttackers.SelectedItem;
+
+            Mage.Heal(friendly);
         }
 
         #endregion

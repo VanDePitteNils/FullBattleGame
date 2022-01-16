@@ -14,6 +14,7 @@ namespace Wel.Battle.Game.Core.Services
         public List<Player> players;
         public List<Player> attackers;
         public List<Player> defenders;
+        public readonly List<string> names = new() {"Alice", "Bob", "Carol", "Dave", "Eve", "Freddy", "Garry", "Harold", "Ian"};
 
         public BattleGameService()
         {
@@ -107,7 +108,7 @@ namespace Wel.Battle.Game.Core.Services
             players.Add(new Assassin(name));
         }
 
-        public void InitLists()
+        private void InitLists()
         {
             players = new List<Player>();
             attackers = new List<Player>();

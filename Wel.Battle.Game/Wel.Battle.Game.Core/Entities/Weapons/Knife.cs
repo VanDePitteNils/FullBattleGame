@@ -8,9 +8,9 @@ namespace Wel.Battle.Game.Core.Entities.Weapons
 {
     public class Knife : Weapon
     {
-        public Knife(string name) : base(name)
+        public Knife()
         {
-            Name = name;
+            Name = GetType().Name;
             Damage = 6;
             Durability = 10;
         }
