@@ -89,9 +89,18 @@ namespace Wel.Battle.Game.Core.Entities
             DefenseStrength = 10;
         }
 
-        public void Equip(Weapon item)
+        public void Equip(Weapon weapon)
         {
-            AttackStrength += item.Damage;
+            weapon.Equiped = true;
+            HasWeapon = true;
+            AttackStrength += weapon.Damage;
+        }
+
+        public void Unequip(Weapon weapon)
+        {
+            HasWeapon = false;
+            weapon.Equiped = false;
+            AttackStrength -= weapon.Damage;
         }
 
         public void Attack(IPlayer defender)
@@ -123,6 +132,10 @@ namespace Wel.Battle.Game.Core.Entities
 
         public override string ToString()
         {
+            if (HasWeapon)
+            {
+                return $"{Name} - {Health} ({GetType().Name.Substring(0, 1).ToUpper()}) [W]";
+            }
             if (IsAlive)
             {
                 return $"{Name} - {Health} ({GetType().Name.Substring(0, 1).ToUpper()})";

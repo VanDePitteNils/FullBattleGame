@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wel.Battle.Game.Core.Entities;
 
 namespace Wel.Battle.Game.Core.Entities.Weapons
 {
@@ -10,6 +11,7 @@ namespace Wel.Battle.Game.Core.Entities.Weapons
     {
         public int Damage { get; set; }
         public int Durability { get; set; }
+        public bool Equiped { get; set; }
 
         private string name;
         public string Name
@@ -34,7 +36,11 @@ namespace Wel.Battle.Game.Core.Entities.Weapons
 
         public override string ToString()
         {
-            return $"{Name} - {Durability}";
+            if (Equiped)
+            {
+                return $"{Name} - Durability: {Durability} (E)";
+            }
+            return $"{Name} - Durability: {Durability}";
         }
     }
 }

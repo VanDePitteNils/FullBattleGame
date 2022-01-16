@@ -14,6 +14,7 @@ namespace Wel.Battle.Game.Core.Services
         public List<Player> players;
         public List<Player> attackers;
         public List<Player> defenders;
+        public List<Weapon> weapons;
         public readonly List<string> names = new() {"Alice", "Bob", "Carol", "Dave", "Eve", "Freddy", "Garry", "Harold", "Ian"};
 
         public BattleGameService()
@@ -33,6 +34,18 @@ namespace Wel.Battle.Game.Core.Services
         public void AddDefender(Player player)
         {
             defenders.Add(player);
+        }
+
+        public void EquipWeapon(Player player, Weapon weapon)
+        {
+            player.Equip(weapon);
+            weapons.Remove(weapon);
+        }
+
+        public void Unequip(Player player, Weapon weapon)
+        {
+            player.Unequip(weapon);
+            weapons.Add(weapon);
         }
 
         public void AddAttacker(Player player)
@@ -113,6 +126,7 @@ namespace Wel.Battle.Game.Core.Services
             players = new List<Player>();
             attackers = new List<Player>();
             defenders = new List<Player>();
+            weapons = new List<Weapon>();
         }
     }
 }

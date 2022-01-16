@@ -58,7 +58,6 @@ namespace Wel.Battle.Game.Wpf
         #region ---- Global Variables ----
 
         BattleGameService bgs = new BattleGameService();
-        private readonly List<Weapon> weapons = new List<Weapon>();
         private readonly Random rnd = new Random();
         int battleCounter;
 
@@ -68,7 +67,6 @@ namespace Wel.Battle.Game.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            btnEquip.IsEnabled = false;
             btnUnequip.IsEnabled = false;
             btnItem.IsEnabled = false;
             MessageBox.Show(UpdateMessage(),"Patch Notes",MessageBoxButton.OK,MessageBoxImage.Information);
@@ -93,14 +91,23 @@ namespace Wel.Battle.Game.Wpf
 
         private void BtnEquip_Click(object sender, RoutedEventArgs e)
         {
-            Player player = (Player)lstDefenders.SelectedItem;
-            player.Equip((Weapon)lstItems.SelectedItem);
-            RefreshLists();
+            if (lstAttackers.SelectedItem != null && lstItems.SelectedItem != null)
+            {
+                Player player = (Player)lstAttackers.SelectedItem;
+                Weapon weapon = (Weapon)lstItems.SelectedItem;
+                bgs.EquipWeapon(player, weapon);
+                RefreshLists();
+                RefreshPlayerInfo();
+                RefreshWeaponList();
+            }else if(lstDefenders.SelectedItem != null && lstItems.SelectedItem != null)
+            {
+                MessageBox.Show("Defenders mogen geen nieuwe wapens hebben");
+            }
         }
 
         private void BtnUnequip_Click(object sender, RoutedEventArgs e)
         {
-            //
+            Player player = (Player)lstAttackers.SelectedItem;
         }
 
         private void BtnAttack_Click(object sender, RoutedEventArgs e)
@@ -181,12 +188,13 @@ namespace Wel.Battle.Game.Wpf
         {
             SeedPlayers();
             SeedTeams();
+            SeedWeapons();
         }
 
         private void SeedWeapons()
         {
-            weapons.Add(new Katana());
-            weapons.Add(new Knife());
+            bgs.weapons.Add(new Katana());
+            bgs.weapons.Add(new Knife());
         }
 
         private void SeedPlayers()
@@ -223,13 +231,18 @@ namespace Wel.Battle.Game.Wpf
         {
             lstAttackers.ItemsSource = bgs.attackers;
             lstDefenders.ItemsSource = bgs.defenders;
-            lstItems.ItemsSource = weapons;
+            lstItems.ItemsSource = bgs.weapons;
         }
 
         public void RefreshLists()
         {
             lstAttackers.Items.Refresh();
             lstDefenders.Items.Refresh();
+        }
+
+        public void RefreshWeaponList()
+        {
+            lstItems.Items.Refresh();
         }
 
         public void RefreshPlayerInfo()
